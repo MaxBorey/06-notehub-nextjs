@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Note } from "../types/note";
+import { Note } from "../types/TEST";
 
 interface NotesApiResponse {
   notes: Note[];

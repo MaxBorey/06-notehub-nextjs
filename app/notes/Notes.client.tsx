@@ -9,7 +9,7 @@ import SearchBox from '../../components/SearchBox/SearchBox';
 import { useQuery } from '@tanstack/react-query';
 import { useDebounce } from 'use-debounce';
 import { getNotes } from '../../lib/api';
-import { Note } from '../../types/note';
+import { Note } from '../../types/TEST';
 
 interface NotesApiResponse {
   notes: Note[];

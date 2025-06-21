@@ -1,4 +1,4 @@
-import { Note } from "../../types/note";
+import { Note } from "../../types/TEST";
 
 type Props = {
   item: Note;
