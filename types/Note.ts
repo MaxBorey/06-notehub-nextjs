@@ -1,10 +1,6 @@
 export interface Note {
-  id: string;
-  tag: string;
+  id: number;
   title: string;
   content: string;
-  categoryId: string;
-  userId: string;
-  createdAt: string;
-  updatedAt: string;
+  tag: string;
 };
