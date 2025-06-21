@@ -1,4 +1,3 @@
-// src/services/noteService.ts
 import axios from "axios";
 import { Note } from "../types/Note";
 
@@ -44,7 +43,7 @@ export const getSingleNote = async (id: number) => {
 
   const res = await axios.get(url, { headers });
   console.log('API RESPONSE', res.data);
-  return res.data; // або res.data, якщо треба
+  return res.data; 
 };
 
 // export async function fetchNoteById(id: number): Promise<Note> {
