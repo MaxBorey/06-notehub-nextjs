@@ -1,6 +1,6 @@
 import { getNotes } from "../../lib/api";
 import NotesClient from "./Notes.client";
-import { Note } from "../../types/Note";
+import { Note } from "../../types/note";
 
 export default async function NotesPage() {
   const page = 1;
