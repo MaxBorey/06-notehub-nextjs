@@ -1,7 +1,7 @@
-import { useFormik } from 'formik';
+import { useFormik, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import css from './NoteForm.module.css';
-import { Note } from '../../types/note';
+import { Note } from '../../types/Note';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createNote } from '../../lib/api';
 
@@ -20,7 +20,7 @@ export default function NoteForm({ onClose }: NoteFormProps) {
     },
   });
 
-  const formik = useFormik<Omit<Note, 'id'>>({
+  const formik = useFormik<Omit<Note, 'id' | 'createdAt' | 'updatedAt'>>({
     initialValues: {
       title: '',
       content: '',
@@ -53,9 +53,7 @@ export default function NoteForm({ onClose }: NoteFormProps) {
           onBlur={formik.handleBlur}
           value={formik.values.title}
         />
-        {formik.touched.title && formik.errors.title && (
-          <div className={css.error}>{formik.errors.title}</div>
-        )}
+        <ErrorMessage name="title" component="div" className={css.error} />
       </div>
 
       <div className={css.formGroup}>
@@ -69,9 +67,7 @@ export default function NoteForm({ onClose }: NoteFormProps) {
           onBlur={formik.handleBlur}
           value={formik.values.content}
         />
-        {formik.touched.content && formik.errors.content && (
-          <div className={css.error}>{formik.errors.content}</div>
-        )}
+        <ErrorMessage name="content" component="div" className={css.error} />
       </div>
 
       <div className={css.formGroup}>
@@ -90,9 +86,7 @@ export default function NoteForm({ onClose }: NoteFormProps) {
           <option value="Meeting">Meeting</option>
           <option value="Shopping">Shopping</option>
         </select>
-        {formik.touched.tag && formik.errors.tag && (
-          <div className={css.error}>{formik.errors.tag}</div>
-        )}
+        <ErrorMessage name="tag" component="div" className={css.error} />
       </div>
 
       <div className={css.actions}>

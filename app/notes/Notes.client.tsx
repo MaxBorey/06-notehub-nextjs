@@ -9,7 +9,7 @@ import SearchBox from '../../components/SearchBox/SearchBox';
 import { useQuery } from '@tanstack/react-query';
 import { useDebounce } from 'use-debounce';
 import { getNotes } from '../../lib/api';
-import { Note } from '../../types/note';
+import { Note } from '../../types/Note';
 
 interface NotesApiResponse {
   notes: Note[];
@@ -19,15 +19,37 @@ interface NotesApiResponse {
   totalPages: number;
 }
 
-export default function NotesClient() {
-  const [page, setPage] = useState(1);
-  const [searchTerm, setSearchTerm] = useState('');
+// Додай тип пропсів!
+interface NotesClientProps {
+  initialNotes: Note[];
+  initialTotalPages: number;
+  initialPage: number;
+  initialSearch: string;
+}
+
+export default function NotesClient({
+  initialNotes,
+  initialTotalPages,
+  initialPage,
+  initialSearch
+}: NotesClientProps) {
+  const [page, setPage] = useState(initialPage);
+  const [searchTerm, setSearchTerm] = useState(initialSearch);
   const [debouncedSearchTerm] = useDebounce(searchTerm, 500);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const { data, isLoading, isError } = useQuery<NotesApiResponse, Error>({
     queryKey: ['notes', debouncedSearchTerm, page],
     queryFn: () => getNotes(debouncedSearchTerm, page),
+    initialData: page === initialPage && debouncedSearchTerm === initialSearch
+      ? {
+          notes: initialNotes,
+          page: initialPage,
+          perPage: 12,
+          total: initialNotes.length,
+          totalPages: initialTotalPages
+        }
+      : undefined,
     placeholderData: previousData => previousData,
   });
 
