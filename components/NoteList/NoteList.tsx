@@ -22,8 +22,7 @@ export default function NoteList({ items }: NoteListProps) {
     onSettled: () => {
       setDeletingId(null);
     },
-    onSuccess: (deletedNote) => {
-      console.log('Deleted:', deletedNote);
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['notes'] });
     },
   });

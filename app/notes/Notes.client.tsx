@@ -32,7 +32,6 @@ export default function NotesClient({
   initialPage,
   initialSearch,
 }: NotesClientProps) {
-
   const [page, setPage] = useState(initialPage);
   const [searchTerm, setSearchTerm] = useState(initialSearch);
   const [debouncedSearchTerm] = useDebounce(searchTerm, 500);

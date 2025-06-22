@@ -40,7 +40,7 @@ export async function deleteNote(id: number): Promise<Note> {
   return response.data.note;
 }
 
-export const getSingleNote = async (id: number): Promise<Note> => {
+export const fetchNoteById = async (id: number): Promise<Note> => {
   const url = `https://notehub-public.goit.study/api/notes/${id}`;
   const token = process.env.NEXT_PUBLIC_VITE_SWAGER_TOKEN;
   const headers = { Authorization: `Bearer ${token}` };
