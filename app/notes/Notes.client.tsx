@@ -19,7 +19,6 @@ interface NotesApiResponse {
   totalPages: number;
 }
 
-// Додай тип пропсів!
 interface NotesClientProps {
   initialNotes: Note[];
   initialTotalPages: number;
@@ -31,27 +30,40 @@ export default function NotesClient({
   initialNotes,
   initialTotalPages,
   initialPage,
-  initialSearch
+  initialSearch,
 }: NotesClientProps) {
+
   const [page, setPage] = useState(initialPage);
   const [searchTerm, setSearchTerm] = useState(initialSearch);
   const [debouncedSearchTerm] = useDebounce(searchTerm, 500);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+ 
+  const invalidData =
+    !Array.isArray(initialNotes) ||
+    typeof initialTotalPages !== 'number' ||
+    typeof initialPage !== 'number' ||
+    typeof initialSearch !== 'string';
+
   const { data, isLoading, isError } = useQuery<NotesApiResponse, Error>({
     queryKey: ['notes', debouncedSearchTerm, page],
     queryFn: () => getNotes(debouncedSearchTerm, page),
-    initialData: page === initialPage && debouncedSearchTerm === initialSearch
-      ? {
-          notes: initialNotes,
-          page: initialPage,
-          perPage: 12,
-          total: initialNotes.length,
-          totalPages: initialTotalPages
-        }
-      : undefined,
+    initialData:
+      page === initialPage && debouncedSearchTerm === initialSearch
+        ? {
+            notes: initialNotes,
+            page: initialPage,
+            perPage: 12,
+            total: initialNotes.length,
+            totalPages: initialTotalPages,
+          }
+        : undefined,
     placeholderData: previousData => previousData,
   });
+
+  if (invalidData) {
+    return <div style={{ color: 'red' }}>No initial notes data</div>;
+  }
 
   const notes: Note[] = data?.notes ?? [];
   const totalPages: number = data?.totalPages ?? 1;

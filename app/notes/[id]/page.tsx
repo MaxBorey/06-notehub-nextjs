@@ -1,29 +1,24 @@
-import {
-  QueryClient,
-  dehydrate,
-  HydrationBoundary
-} from '@tanstack/react-query';
-import { getSingleNote } from '../../../lib/api';
-import NoteDetailsClient from './NoteDetails.client';
+import { getNotes } from "../../../lib/api";
+import NotesClient from "../Notes.client";
 
-type Props = {
-  params: Promise<{ id: string }>
-};
+export default async function NotesPage() {
+  let data;
+  try {
+    data = await getNotes('', 1);
+  } catch (err) {
+    return <div>Could not fetch notes. {String(err)}</div>;
+  }
 
-export default async function NoteDetails({ params }: Props) {
-  const { id } = await params;     
-  const noteId = Number(id);
-
-  const queryClient = new QueryClient();
-
-  await queryClient.prefetchQuery({
-    queryKey: ['note', noteId],
-    queryFn: () => getSingleNote(noteId)
-  });
+  if (!data || !Array.isArray(data.notes)) {
+    return <div>No notes available</div>;
+  }
 
   return (
-    <HydrationBoundary state={dehydrate(queryClient)}>
-      <NoteDetailsClient />
-    </HydrationBoundary>
+    <NotesClient
+      initialNotes={data.notes}
+      initialTotalPages={data.totalPages}
+      initialPage={data.page}
+      initialSearch={''}
+    />
   );
 }

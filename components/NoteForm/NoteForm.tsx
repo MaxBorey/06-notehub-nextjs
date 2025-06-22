@@ -1,4 +1,4 @@
-import { useFormik, ErrorMessage } from 'formik';
+import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import css from './NoteForm.module.css';
 import { Note } from '../../types/note';
@@ -53,7 +53,9 @@ export default function NoteForm({ onClose }: NoteFormProps) {
           onBlur={formik.handleBlur}
           value={formik.values.title}
         />
-        <ErrorMessage name="title" component="div" className={css.error} />
+       {formik.touched.title && formik.errors.title && (
+          <div className={css.error}>{formik.errors.title}</div>
+        )}
       </div>
 
       <div className={css.formGroup}>
@@ -67,7 +69,9 @@ export default function NoteForm({ onClose }: NoteFormProps) {
           onBlur={formik.handleBlur}
           value={formik.values.content}
         />
-        <ErrorMessage name="content" component="div" className={css.error} />
+        {formik.touched.content && formik.errors.content && (
+          <div className={css.error}>{formik.errors.content}</div>
+        )}
       </div>
 
       <div className={css.formGroup}>
@@ -86,7 +90,9 @@ export default function NoteForm({ onClose }: NoteFormProps) {
           <option value="Meeting">Meeting</option>
           <option value="Shopping">Shopping</option>
         </select>
-        <ErrorMessage name="tag" component="div" className={css.error} />
+        {formik.touched.tag && formik.errors.tag && (
+          <div className={css.error}>{formik.errors.tag}</div>
+        )}
       </div>
 
       <div className={css.actions}>
