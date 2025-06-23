@@ -31,13 +31,13 @@ export async function getNotes(
 export async function createNote(
   newNote: Omit<Note, 'id' | 'createdAt' | 'updatedAt'>
 ): Promise<Note> {
-  const response = await axios.post<{ note: Note }>(API_URL, newNote, { headers });
-  return response.data.note;
+  const response = await axios.post<Note>(API_URL, newNote, { headers });
+  return response.data;
 }
 
 export async function deleteNote(id: number): Promise<Note> {
-  const response = await axios.delete<{ note: Note }>(`${API_URL}/${id}`, { headers });
-  return response.data.note;
+  const response = await axios.delete<Note>(`${API_URL}/${id}`, { headers });
+  return response.data;
 }
 
 export const fetchNoteById = async (id: number): Promise<Note> => {
