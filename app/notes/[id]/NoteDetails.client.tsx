@@ -1,22 +1,39 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { useParams } from 'next/navigation';
 import { fetchNoteById } from "@/lib/api";
-import css from './NoteDetails.client.module.css'
+import css from './NoteDetails.client.module.css';
 
-const NoteDetailsClient = () => {
-	const { id } = useParams<{ id: string }>();
-  const noteId = Number(id)
-  const { data: note, isLoading, error } = useQuery({
-    queryKey: ["note", id],
+interface NoteDetailsClientProps {
+  noteId: number;
+}
+
+const NoteDetailsClient = ({ noteId }: NoteDetailsClientProps) => {
+  const {
+    data,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["note", noteId],
     queryFn: () => fetchNoteById(noteId),
     refetchOnMount: false,
+    enabled: !isNaN(noteId),
   });
 
-  if (isLoading) return <p>Loading, please wait...</p>
+  if (isNaN(noteId)) {
+    return <p className={css.content}>Invalid note ID</p>;
+  }
 
-  if (error || !note) return <p>Something went wrong.</p>;
+  if (isLoading) {
+    return <p className={css.content}>Loading, please wait...</p>;
+  }
+
+  if (error || !data) {
+    return <p className={css.content}>Something went wrong.</p>;
+  }
+
+  
+  const note = data.note ?? data;
 
   const formattedDate = note.updatedAt
     ? `Updated at: ${note.updatedAt}`
@@ -33,7 +50,6 @@ const NoteDetailsClient = () => {
         <p className={css.date}>{formattedDate}</p>
       </div>
     </div>
-  
   );
 };
 
