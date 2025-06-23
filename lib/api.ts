@@ -42,7 +42,6 @@ export async function deleteNote(id: number): Promise<Note> {
 
 export const fetchNoteById = async (id: number): Promise<Note> => {
   const url = `https://notehub-public.goit.study/api/notes/${id}`;
-  const token = process.env.NEXT_PUBLIC_SWAGER_TOKEN;
   const headers = { Authorization: `Bearer ${token}` };
 
   const res = await axios.get<Note>(url, { headers });
