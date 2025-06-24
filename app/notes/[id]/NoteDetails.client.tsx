@@ -8,6 +8,18 @@ interface NoteDetailsClientProps {
   noteId: number;
 }
 
+const getInvalidIdMessage = () => (
+  <p className={css.content}>Invalid note ID</p>
+);
+
+const getLoadingMessage = () => (
+  <p className={css.content}>Loading, please wait...</p>
+);
+
+const getErrorMessage = () => (
+  <p className={css.content}>Something went wrong.</p>
+);
+
 const NoteDetailsClient = ({ noteId }: NoteDetailsClientProps) => {
   const {
     data,
@@ -20,21 +32,11 @@ const NoteDetailsClient = ({ noteId }: NoteDetailsClientProps) => {
     enabled: !isNaN(noteId),
   });
 
-  if (isNaN(noteId)) {
-    return <p className={css.content}>Invalid note ID</p>;
-  }
+  if (isNaN(noteId)) return getInvalidIdMessage();
+  if (isLoading) return getLoadingMessage();
+  if (error || !data) return getErrorMessage();
 
-  if (isLoading) {
-    return <p className={css.content}>Loading, please wait...</p>;
-  }
-
-  if (error || !data) {
-    return <p className={css.content}>Something went wrong.</p>;
-  }
-
-  
-  const note = data.note ?? data;
-
+  const note = data;
   const formattedDate = note.updatedAt
     ? `Updated at: ${note.updatedAt}`
     : `Created at: ${note.createdAt}`;
@@ -44,7 +46,7 @@ const NoteDetailsClient = ({ noteId }: NoteDetailsClientProps) => {
       <div className={css.item}>
         <div className={css.header}>
           <h2>{note.title}</h2>
-          <button className={css.editBtn}>Edit note</button>
+          {/* <button className={css.editBtn}>Edit note</button> */}
         </div>
         <p className={css.content}>{note.content}</p>
         <p className={css.date}>{formattedDate}</p>
